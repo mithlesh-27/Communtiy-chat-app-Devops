@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Community App</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #004494;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+        }
+
+        nav ul li {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        nav ul li:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        section {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form label {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        form input, form textarea, form button {
+            padding: 12px;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        form input:focus, form textarea:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            border-radius: 8px;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .progress-bar {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+
+        .statistics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .stat-item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            flex: 1;
+            margin: 0 10px;
+        }
+
+        .stat-item h3 {
+            margin: 0 0 10px;
+        }
+
+        .stat-item p {
+            font-size: 1.4rem;
+            color: #007bff;
+        }
+
+        ul {
+            padding-left: 0;
+        }
+
+        ul li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            list-style-type: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            nav ul li {
+                width: 100%;
+                text-align: center;
+            }
+
+            .statistics {
+                flex-direction: column;
+            }
+
+            .stat-item {
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Chat Community App</h1>
+        </header>
+        <nav>
+            <ul>
+                <li id="dashboard-link">Dashboard</li>
+                <li id="create-thread-link">Create Thread</li>
+                <li id="add-message-link">Add Message</li>
+                <li id="update-thread-link">Update Thread</li>
+                <li id="delete-thread-link">Delete Thread</li>
+                <li id="delete-reply-link">Delete Reply</li>
+                <li id="fetch-threads-link">Fetch Threads</li>
+                <li id="fetch-messages-link">Fetch Messages</li>
+            </ul>
+        </nav>
+        <main>
+            <section id="dashboard" class="hidden">
+                <h1>Welcome to the Chat Community App</h1>
+                <p>Use the navigation to manage threads and messages.</p>
+            </section>
+            <section id="create-thread" class="hidden">
+                <h2>Create a New Thread</h2>
+                <form id="create-thread-form">
+                    <label for="userId">User ID:</label>
+                    <input type="text" id="userId" required>
+                    <label for="threadTitle">Title:</label>
+                    <input type="text" id="threadTitle" required>
+                    <label for="threadContent">Content:</label>
+                    <textarea id="threadContent" required></textarea>
+                    <button type="submit">Create Thread</button>
+                </form>
+                <div id="thread-message"></div>
+                <div id="created-threads" class="thread-details hidden"></div>
+            </section>
+            <section id="add-message" class="hidden">
+                <h2>Add a Message</h2>
+                <form id="add-message-form">
+                    <label for="messageUserId">User ID:</label>
+                    <input type="text" id="messageUserId" required>
+                    <label for="threadId">Thread ID:</label>
+                    <input type="number" id="threadId" required>
+                    <label for="messageContent">Message Content:</label>
+                    <textarea id="messageContent" required></textarea>
+                    <button type="submit">Add Message</button>
+                </form>
+                <div id="message-message"></div>
+            </section>
+            <section id="update-thread" class="hidden">
+                <h2>Update a Thread</h2>
+                <form id="update-thread-form">
+                    <label for="updateThreadId">Thread ID:</label>
+                    <input type="number" id="updateThreadId" required>
+                    <label for="updateThreadTitle">New Title:</label>
+                    <input type="text" id="updateThreadTitle" required>
+                    <label for="updateThreadContent">New Content:</label>
+                    <textarea id="updateThreadContent" required></textarea>
+                    <button type="submit">Update Thread</button>
+                </form>
+                <div id="update-thread-message"></div>
+            </section>
+            <section id="delete-thread" class="hidden">
+                <h2>Delete a Thread</h2>
+                <form id="delete-thread-form">
+                    <label for="deleteThreadId">Thread ID:</label>
+                    <input type="number" id="deleteThreadId" required>
+                    <button type="submit">Delete Thread</button>
+                </form>
+                <div id="delete-thread-message"></div>
+            </section>
+            <section id="delete-reply" class="hidden">
+                <h2>Delete a Reply</h2>
+                <form id="delete-reply-form">
+                    <label for="replyThreadId">Thread ID:</label>
+                    <input type="number" id="replyThreadId" required>
+                    <label for="replyId">Reply ID:</label>
+                    <input type="text" id="replyId" required>
+                    <button type="submit">Delete Reply</button>
+                </form>
+                <div id="delete-reply-message"></div>
+            </section>
+            <section id="fetch-threads" class="hidden">
+                <h2>Fetch Threads</h2>
+                <button id="fetch-threads-button">Fetch All Threads</button>
+                <ul id="threadList"></ul>
+            </section>
+            <section id="fetch-messages" class="hidden">
+                <h2>Fetch Messages</h2>
+                <form id="fetch-messages-form">
+                    <label for="getMessageThreadId">Thread ID:</label>
+                    <input type="number" id="getMessageThreadId" required>
+                    <button type="submit">Fetch Messages</button>
+                </form>
+                <ul id="messageList"></ul>
+            </section>
+            <section id="auth-section">
+                <h2>User Authentication</h2>
+                <form id="auth-form">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" required>
+                    <button type="submit">Login</button>
+                </form>
+                <div id="auth-message"></div>
+                <button id="show-signup">Sign Up</button>
+            </section>
+            <section id="signup-section" class="hidden">
+                <h2>Sign Up</h2>
+                <form id="signup-form">
+                    <label for="signup-username">Username:</label>
+                    <input type="text" id="signup-username" required>
+                    <label for="signup-password">Password:</label>
+                    <input type="password" id="signup-password" required>
+                    <button type="submit">Sign Up</button>
+                </form>
+                <div id="signup-message"></div>
+                <button id="show-login">Back to Login</button>
+            </section>
+        </main>
+    </div>
+    <script>
+        const API_BASE_URL = 'https://qpcmanfuv8.execute-api.ap-south-1.amazonaws.com/dev';
+        
+        
+
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('main > section');
+            sections.forEach(section => section.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+        }
+
+        async function apiFetch(endpoint, options = {}) {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            return response.json();
+        }
+
+        function displayJsonMessage(elementId, data) {
+            const messageContainer = document.getElementById(elementId);
+            messageContainer.innerHTML = ''; // Clear previous messages
+
+            const message = document.createElement('div');
+            message.className = data.message ? 'success' : 'error';
+            message.textContent = data.message || data.error;
+            messageContainer.appendChild(message);
+        }
+
+        document.getElementById('dashboard-link').addEventListener('click', () => showSection('dashboard'));
+        document.getElementById('create-thread-link').addEventListener('click', () => showSection('create-thread'));
+        document.getElementById('add-message-link').addEventListener('click', () => showSection('add-message'));
+        document.getElementById('update-thread-link').addEventListener('click', () => showSection('update-thread'));
+        document.getElementById('delete-thread-link').addEventListener('click', () => showSection('delete-thread'));
+        document.getElementById('delete-reply-link').addEventListener('click', () => showSection('delete-reply'));
+        document.getElementById('fetch-threads-link').addEventListener('click', () => showSection('fetch-threads'));
+        document.getElementById('fetch-messages-link').addEventListener('click', () => showSection('fetch-messages'));
+
+        document.getElementById('create-thread-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const userId = document.getElementById('userId').value;
+            const title = document.getElementById('threadTitle').value;
+            const content = document.getElementById('threadContent').value;
+
+            try {
+                const result = await apiFetch('/createThread', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId, title, content }),
+                });
+
+                displayJsonMessage('thread-message', { message: 'Thread created successfully!' });
+
+                const createdThreads = document.getElementById('created-threads');
+                createdThreads.classList.remove('hidden');
+                createdThreads.innerHTML = `Thread ID: ${result.threadId}, Title: ${title}, Content: ${content}`;
+
+            } catch (error) {
+                displayJsonMessage('thread-message', { error: error.message });
+            }
+        });
+
+        document.getElementById('add-message-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const threadId = document.getElementById('threadId').value;
+            const userId = document.getElementById('messageUserId').value;
+            const content = document.getElementById('messageContent').value;
+
+            try {
+                const result = await apiFetch('/addReply', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ threadId, userId, content }),
+                });
+
+                displayJsonMessage('message-message', { message: 'Message added successfully!' });
+                userId.innerHTML = `Message ID: ${result.replyId},  Content: ${content}`;
+            } catch (error) {
+                displayJsonMessage('message-message', { error: error.message });
+            }
+        });
+
+        document.getElementById('update-thread-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const threadId = document.getElementById('updateThreadId').value;
+            const title = document.getElementById('updateThreadTitle').value;
+            const content = document.getElementById('updateThreadContent').value;
+
+            try {
+                const result = await apiFetch(`/updateThread`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ threadId, title, content }),
+                });
+
+                displayJsonMessage('update-thread-message', { message: 'Thread updated successfully!' });
+            } catch (error) {
+                displayJsonMessage('update-thread-message', { error: error.message });
+            }
+        });
+
+        document.getElementById('delete-thread-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const threadId = document.getElementById('deleteThreadId').value;
+
+            try {
+                const result = await apiFetch(`/deleteThread?threadId=${threadId}`, {
+                    method: 'DELETE',
+                });
+
+                displayJsonMessage('delete-thread-message', { message: 'Thread deleted successfully!' });
+            } catch (error) {
+                displayJsonMessage('delete-thread-message', { error: error.message });
+            }
+        });
+
+        document.getElementById('delete-reply-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const threadId = document.getElementById('replyThreadId').value;
+            const replyId = document.getElementById('replyId').value;
+
+            try {
+                const result = await apiFetch(`/deleteReply?threadId=${threadId}&replyId=${replyId}`, {
+                    method: 'DELETE',
+                });
+
+                displayJsonMessage('delete-reply-message', { message: 'Reply deleted successfully!' });
+            } catch (error) {
+                displayJsonMessage('delete-reply-message', { error: error.message });
+            }
+        });
+
+        document.getElementById('fetch-threads-button').addEventListener('click', async () => {
+            const threadList = document.getElementById('threadList');
+            threadList.innerHTML = ''; // Clear previous results
+
+            try {
+                const response = await apiFetch('/listThreads', {
+                    method: 'GET',
+                });
+
+                if (Array.isArray(response) && response.length > 0) {
+                    response.forEach(thread => {
+                        const li = document.createElement('li');
+                        li.innerText = `Thread ID: ${thread.threadId}, Title: ${thread.title}, User ID: ${thread.userId}`;
+                        threadList.appendChild(li);
+                    });
+                } else {
+                    threadList.innerHTML = '<li>No threads available.</li>';
+                }
+            } catch (error) {
+                threadList.innerHTML = `<li>Error fetching threads: ${error.message}</li>`;
+            }
+        });
+
+        document.getElementById('fetch-messages-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const threadId = document.getElementById('getMessageThreadId').value;
+            const messageList = document.getElementById('messageList');
+            messageList.innerHTML = ''; // Clear previous results
+
+            try {
+                const result = await apiFetch(`/getChatMessages?threadId=${threadId}`);
+                if (Array.isArray(result) && result.length > 0) {
+                    result.forEach(message => {
+                        const li = document.createElement('li');
+                        li.innerText = `${message.userId}: ${message.content}`;
+                        messageList.appendChild(li);
+                    });
+                } else {
+                    messageList.innerHTML = '<li>No messages found for this thread.</li>';
+                }
+            } catch (error) {
+                messageList.innerHTML = `<li>Error fetching messages: ${error.message}</li>`;
+            }
+        });
+
+      
+    </script>
+</body>
+</html>

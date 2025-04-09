@@ -1,0 +1,28 @@
+service: community-chat-app
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: ap-south-1
+
+functions:
+  chatHandler:
+    handler: backend/lambda_function.lambda_handler
+    events:
+      - http:
+          path: chat
+          method: post
+
+resources:
+  Resources:
+    ChatMessages:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ChatMessages
+        AttributeDefinitions:
+          - AttributeName: messageId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: messageId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
