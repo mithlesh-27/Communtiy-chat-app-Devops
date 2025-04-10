@@ -1,0 +1,24 @@
+{
+  "name": "community-chat-app",
+  "version": "1.0.0",
+  "description": "This is a serverless, real-time chat app backend built with AWS Lambda (Python), API Gateway, and DynamoDB — fully automated using GitHub Actions and deployed via Serverless Framework.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mithlesh-27/Communtiy-chat-app-Devops.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/mithlesh-27/Communtiy-chat-app-Devops/issues"
+  },
+  "homepage": "https://github.com/mithlesh-27/Communtiy-chat-app-Devops#readme",
+  "devDependencies": {
+    "serverless": "^3.38.0"
+  }
+}
