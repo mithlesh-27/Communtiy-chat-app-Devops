@@ -1,5 +1,8 @@
 service: community-chat-app
 
+org: null
+app: null
+
 provider:
   name: aws
   runtime: python3.9
@@ -12,6 +15,10 @@ functions:
       - http:
           path: chat
           method: post
+
+package:
+  include:
+    - ../backend/**
 
 resources:
   Resources:
