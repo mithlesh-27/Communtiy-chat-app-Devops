@@ -17,19 +17,7 @@ functions:
           method: post
 
 package:
-  include:
+  patterns:
     - backend/**
-
-resources:
-  Resources:
-    ChatMessages:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        TableName: ChatMessages
-        AttributeDefinitions:
-          - AttributeName: messageId
-            AttributeType: S
-        KeySchema:
-          - AttributeName: messageId
-            KeyType: HASH
-        BillingMode: PAY_PER_REQUEST
+    - '!node_modules/**'
+    - '!**/*.test.*'
